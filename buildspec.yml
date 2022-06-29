@@ -1,0 +1,91 @@
+version: 0.2
+
+run-as: root
+
+env:
+  shell: bash
+  variables:
+    app_name: "flask_app"
+    env: "dev"
+  parameter-store:
+    db_username: "db_user"
+    db_password: "db_pass"
+#  exported-variables:
+#    - variable
+#    - variable
+#  secrets-manager:
+#    key: secret-id:json-key:version-stage:version-id
+  git-credential-helper: no
+
+proxy:
+  upload-artifacts: no
+  logs: no
+
+batch:
+  fast-fail: false | true
+  # build-list:
+  # build-matrix:
+  # build-graph:
+
+phases:
+  install:
+    run-as: root
+    on-failure: ABORT
+    runtime-versions:
+      python: 3.8
+    commands:
+      - apt-get update
+      - apt-get install -y python-pip
+      - pip install flask
+      - echo installation complete
+    finally:
+      - echo "running final command"
+  pre_build:
+    run-as: root
+    on-failure: ABORT
+    commands:
+      - echo running pre-build command
+      - echo login to AWS ECR
+    finally:
+      - echo running finally pre-build
+  build:
+    run-as: root
+    on-failure: ABORT
+    commands:
+      - echo insert build command here if any
+    finally:
+      - echo running build finally
+  post_build:
+    run-as: root
+    on-failure: ABORT
+    commands:
+      - echo post build command
+      - echo push docker image into ECR
+    finally:
+      - echo "post build finally"
+reports:
+  report-group-name-or-arn:
+    files:
+      - '**/*'
+    discard-paths: no
+    file-format: SIMPLECOV
+artifacts:
+  files:
+    - '**/*'
+  name: flask_app-$(date +%Y-%m-%d)
+  discard-paths: no
+  base-directory: flask_app
+  exclude-paths: db/*
+  enable-symlinks: no
+  s3-prefix: flask_app
+  secondary-artifacts:
+    artifactIdentifier:
+      files:
+        - location
+        - location
+      discard-paths: no | yes
+      base-directory: location
+cache:
+  paths:
+    - path
+    - path
