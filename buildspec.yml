@@ -78,14 +78,14 @@ artifacts:
   exclude-paths: db/*
   enable-symlinks: no
   s3-prefix: flask_app
-  secondary-artifacts:
-    artifactIdentifier:
-      files:
-        - location
-        - location
-      discard-paths: no | yes
-      base-directory: location
-cache:
-  paths:
-    - path
-    - path
+#  secondary-artifacts:
+#    artifactIdentifier:
+#      files:
+#        - location
+#        - location
+#      discard-paths: no
+#      base-directory: location
+#cache:
+#  paths:
+#    - path
+#    - path
